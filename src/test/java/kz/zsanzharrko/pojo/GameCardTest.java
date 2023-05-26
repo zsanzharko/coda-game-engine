@@ -1,6 +1,6 @@
 package kz.zsanzharrko.pojo;
 
-import kz.zsanzharrko.model.GameCard;
+import kz.zsanzharrko.gamecard.GameCard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
