@@ -1,5 +1,6 @@
 package kz.zsanzharrko.model;
 
+import kz.zsanzharrko.gamecard.GameCard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
