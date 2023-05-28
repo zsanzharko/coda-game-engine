@@ -17,5 +17,5 @@ public interface ArenaService {
 
   Map<Integer, List<GameCard>> getArenaFromPlayer(Player player);
 
-  List<GameCard> getArenaFromPlayer(Player player, int row);
+  Map<Player, Map<Integer, List<GameCard>>> getArenaForPlayerId(String id);
 }

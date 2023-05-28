@@ -11,7 +11,6 @@ import kz.zsanzharrko.model.Player;
 import kz.zsanzharrko.model.PlayerState;
 import kz.zsanzharrko.service.session.preparation.SessionGameBalancerService;
 import kz.zsanzharrko.service.statistic.GameStatisticsState;
-import kz.zsanzharrko.service.statistic.SendGameStatistics;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +35,10 @@ public class GameSession implements ArenaService {
     this.gameBalancerService = SessionGameBalancerService.getInstance(gameConfig);
     this.playersWithCard = this.gameBalancerService.preparationBalanceCards(players);
     if (this.playersWithCard == null) {
-      throw new Exception("Can init cards on players");
+      throw new Exception("Can't init cards on players, cause ");
     }
     this.roundState = GameRoundState.NONE;
+    log.debug("Game session is setted");
   }
 
   public Set<Player> getPlayers() {
@@ -56,7 +56,7 @@ public class GameSession implements ArenaService {
 
   @Override
   public GameCard addCard(Player player, Integer row, GameCard card) {
-    if (notExist(player) || invalidCard(player, card)) {
+    if (playerNotExist(player) || invalidCard(player, card)) {
       return null;
     }
     return gameArena.addCard(player, row, card);
@@ -64,23 +64,10 @@ public class GameSession implements ArenaService {
 
   @Override
   public boolean removeCard(Player player, Integer row, GameCard card) {
-    if (notExist(player) || invalidCard(player, card)) {
+    if (playerNotExist(player) || invalidCard(player, card)) {
       return false;
     }
     return gameArena.removeCard(player, row, card);
-  }
-
-  /**
-   * Get information about a current on game arena.
-   * This method send statistics to implemented services
-   * like server side or mobile app
-   *
-   * @param sender send statistics to implemented services
-   */
-  public void sendStatistics(SendGameStatistics sender) {
-    Map<Player, Map<GameStatisticsState, String>> playersStatistics = getStatistics();
-
-    sender.send(playersStatistics);
   }
 
   @Override
@@ -90,24 +77,28 @@ public class GameSession implements ArenaService {
 
   @Override
   public Map<Integer, List<GameCard>> getArenaFromPlayer(Player player) {
-    if (notExist(player)) {
+    if (playerNotExist(player)) {
       return null;
     }
     return gameArena.getArena(player);
   }
 
   @Override
-  public List<GameCard> getArenaFromPlayer(Player player, int row) {
-    if (notExist(player)) {
+  public Map<Player, Map<Integer, List<GameCard>>> getArenaForPlayerId(String id) {
+    if (playerNotExist(id)) {
       return null;
     }
-    return gameArena.getArena(player, row);
+    return gameArena.getArena();
   }
 
-  private boolean notExist(Player player) {
+  private boolean playerNotExist(Player player) {
     return !gameArena.getPlayers().contains(player)
-            || !gameArena.getArena().containsKey(player)
-            || player.getState() != PlayerState.IN_GAME;
+            || !gameArena.getArena().containsKey(player);
+  }
+
+  private boolean playerNotExist(String playerId) {
+    return !gameArena.getPlayers().stream().anyMatch((p) -> p.getId().equals(playerId))
+            || !gameArena.getArena().keySet().stream().anyMatch((p) -> p.getId().equals(playerId));
   }
 
   private boolean invalidCard(Player player, GameCard card) {

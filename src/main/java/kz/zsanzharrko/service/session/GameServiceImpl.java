@@ -29,7 +29,6 @@ public class GameServiceImpl implements GameService {
     if (players == null) {
       throw new GameStartException("Players can not be null");
     } else if (!(gameConfig.getSessionPlayers() == players.size())) {
-      // TODO: 1/25/2023 need to check how to except method
       throw new GameStartException("Players is not be compatibility size player on game",
               new GameException("Have problem with connect service... Check rule connect player." +
                       " Also check waiting room"));
@@ -42,8 +41,6 @@ public class GameServiceImpl implements GameService {
     for (Player player : players) {
       if (!(RuleManager.prepareToGameSession(player))) {
         log.debug(String.format("Can't prepared player %s to this game", player));
-        // FIXME: 1/9/2023 Take interface and send information about can't start game
-        //  cause player is not prepared. and remove exception if problem on player side.
         throw new GameStartException("Can't start cause preparation is been successfully.");
       }
     }
