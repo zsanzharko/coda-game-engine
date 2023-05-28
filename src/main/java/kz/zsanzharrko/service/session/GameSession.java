@@ -97,8 +97,8 @@ public class GameSession implements ArenaService {
   }
 
   private boolean playerNotExist(String playerId) {
-    return !gameArena.getPlayers().stream().anyMatch((p) -> p.getId().equals(playerId))
-            || !gameArena.getArena().keySet().stream().anyMatch((p) -> p.getId().equals(playerId));
+    return gameArena.getPlayers().stream().noneMatch((p) -> p.getId().equals(playerId))
+            || gameArena.getArena().keySet().stream().noneMatch((p) -> p.getId().equals(playerId));
   }
 
   private boolean invalidCard(Player player, GameCard card) {
