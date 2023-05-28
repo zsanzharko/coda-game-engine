@@ -15,11 +15,5 @@ public interface GameSessionService {
 
   Map<Player, Map<GameStatisticsState, String>> getStatistics();
 
-  Map<Integer, List<GameCard>> getArenaFromPlayer(Player player);
-
-  Map<Player, Map<Integer, List<GameCard>>> getArenaForPlayerId(String id);
-
   Map<Player, Map<Integer, List<GameCard>>> getArena();
-
-  List<GameCard> getArena(Player player, int row);
 }

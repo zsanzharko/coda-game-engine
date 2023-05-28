@@ -77,8 +77,8 @@ class GameArenaTest {
     gameSession.addCard(player.get(), 0, card.get());
     gameSession.addCard(player.get(), 1, card.get());
     // assert place cards
-    assertEquals(1, gameSession.getArena(player.get(), 0).size());
-    assertEquals(1, gameSession.getArena(player.get(), 1).size());
+    assertEquals(1, gameSession.getArena().get(player.get()).get(0).size());
+    assertEquals(1, gameSession.getArena().get(player.get()).get(1).size());
 
     assertNull(gameSession.addCard(player.get(), 2, card.get()));
 

@@ -76,22 +76,6 @@ public class GameSession implements GameSessionService {
   }
 
   @Override
-  public Map<Integer, List<GameCard>> getArenaFromPlayer(Player player) {
-    if (playerNotExist(player)) {
-      return null;
-    }
-    return gameArena.getArena(player);
-  }
-
-  @Override
-  public Map<Player, Map<Integer, List<GameCard>>> getArenaForPlayerId(String id) {
-    if (playerNotExist(id)) {
-      return null;
-    }
-    return gameArena.getArena();
-  }
-
-  @Override
   public Map<Player, Map<Integer, List<GameCard>>> getArena() {
     if (gameArena != null) {
       return gameArena.getArena();
@@ -99,22 +83,9 @@ public class GameSession implements GameSessionService {
     return null;
   }
 
-  @Override
-  public List<GameCard> getArena(Player player, int row) {
-    if (gameArena != null) {
-      return gameArena.getArena(player, row);
-    }
-    return null;
-  }
-
   private boolean playerNotExist(Player player) {
     return !gameArena.getPlayers().contains(player)
             || !gameArena.getArena().containsKey(player);
-  }
-
-  private boolean playerNotExist(String playerId) {
-    return gameArena.getPlayers().stream().noneMatch((p) -> p.getId().equals(playerId))
-            || gameArena.getArena().keySet().stream().noneMatch((p) -> p.getId().equals(playerId));
   }
 
   private boolean invalidCard(Player player, GameCard card) {
