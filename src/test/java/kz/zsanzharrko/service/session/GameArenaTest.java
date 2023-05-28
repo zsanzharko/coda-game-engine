@@ -46,11 +46,10 @@ class GameArenaTest {
     }
     UUID sessionGame = gameService.startSession(players);
     assertNotNull(sessionGame);
-    GameSession gameSession = gameService.getGameBySession(sessionGame);
+    GameSessionService gameSession = gameService.getGameBySession(sessionGame);
 
-    assertNotNull(gameSession.getGameArena());
-    assertNotNull(gameSession.getGameArena().getArena());
-    assertEquals(2, gameSession.getGameArena().getArena().size());
+    assertNotNull(gameSession.getArena());
+    assertEquals(2, gameSession.getArena().size());
   }
 
   @Test
@@ -68,20 +67,20 @@ class GameArenaTest {
     }
     UUID sessionGame = gameService.startSession(players);
     assertNotNull(sessionGame);
-    GameSession gameSession = gameService.getGameBySession(sessionGame);
+    GameSessionService gameSession = gameService.getGameBySession(sessionGame);
 
     Optional<GameCard> card = cards.stream().findFirst();
     Optional<Player> player = players.stream().findFirst();
     assertTrue(card.isPresent());
     assertTrue(player.isPresent());
     // add cards to arena
-    gameSession.getGameArena().addCard(player.get(), 0, card.get());
-    gameSession.getGameArena().addCard(player.get(), 1, card.get());
+    gameSession.addCard(player.get(), 0, card.get());
+    gameSession.addCard(player.get(), 1, card.get());
     // assert place cards
-    assertEquals(1, gameSession.getGameArena().getArena(player.get(), 0).size());
-    assertEquals(1, gameSession.getGameArena().getArena(player.get(), 1).size());
+    assertEquals(1, gameSession.getArena().get(player.get()).get(0).size());
+    assertEquals(1, gameSession.getArena().get(player.get()).get(1).size());
 
-    assertNull(gameSession.getGameArena().addCard(player.get(), 2, card.get()));
+    assertNull(gameSession.addCard(player.get(), 2, card.get()));
 
   }
 
@@ -100,20 +99,20 @@ class GameArenaTest {
     }
     UUID sessionGame = gameService.startSession(players);
     assertNotNull(sessionGame);
-    GameSession gameSession = gameService.getGameBySession(sessionGame);
+    GameSessionService gameSession = gameService.getGameBySession(sessionGame);
 
     Optional<GameCard> card = cards.stream().findFirst();
     Optional<Player> player = players.stream().findFirst();
     assertTrue(card.isPresent());
     assertTrue(player.isPresent());
     // add cards to arena
-    gameSession.getGameArena().addCard(player.get(), 0, card.get());
+    gameSession.addCard(player.get(), 0, card.get());
 
-    assertTrue(gameSession.getGameArena().removeCard(player.get(), 0, card.get()));
+    assertTrue(gameSession.removeCard(player.get(), 0, card.get()));
 
     GameCard otherCard = new GameCard("Other Card", "Desc", 1000);
-    assertFalse(gameSession.getGameArena().removeCard(player.get(), 0, otherCard));
-    assertFalse(gameSession.getGameArena().removeCard(player.get(), 1, otherCard));
+    assertFalse(gameSession.removeCard(player.get(), 0, otherCard));
+    assertFalse(gameSession.removeCard(player.get(), 1, otherCard));
   }
 
   @Test
