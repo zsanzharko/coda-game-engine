@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Getter
-public class GameSession implements ArenaService {
+public class GameSession implements GameSessionService {
   @Setter
   private GameRoundState roundState;
   private Map<Player, List<GameCard>> playersWithCard;
@@ -38,7 +38,7 @@ public class GameSession implements ArenaService {
       throw new Exception("Can't init cards on players, cause ");
     }
     this.roundState = GameRoundState.NONE;
-    log.debug("Game session is setted");
+    log.debug("Game session is configured");
   }
 
   public Set<Player> getPlayers() {
@@ -89,6 +89,22 @@ public class GameSession implements ArenaService {
       return null;
     }
     return gameArena.getArena();
+  }
+
+  @Override
+  public Map<Player, Map<Integer, List<GameCard>>> getArena() {
+    if (gameArena != null) {
+      return gameArena.getArena();
+    }
+    return null;
+  }
+
+  @Override
+  public List<GameCard> getArena(Player player, int row) {
+    if (gameArena != null) {
+      return gameArena.getArena(player, row);
+    }
+    return null;
   }
 
   private boolean playerNotExist(Player player) {

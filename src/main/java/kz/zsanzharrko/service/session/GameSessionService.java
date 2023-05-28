@@ -8,7 +8,7 @@ import kz.zsanzharrko.service.statistic.GameStatisticsState;
 import java.util.List;
 import java.util.Map;
 
-public interface ArenaService {
+public interface GameSessionService {
 
   GameCard addCard(Player player, Integer row, GameCard card);
   boolean removeCard(Player player, Integer row, GameCard card);
@@ -18,4 +18,8 @@ public interface ArenaService {
   Map<Integer, List<GameCard>> getArenaFromPlayer(Player player);
 
   Map<Player, Map<Integer, List<GameCard>>> getArenaForPlayerId(String id);
+
+  Map<Player, Map<Integer, List<GameCard>>> getArena();
+
+  List<GameCard> getArena(Player player, int row);
 }
