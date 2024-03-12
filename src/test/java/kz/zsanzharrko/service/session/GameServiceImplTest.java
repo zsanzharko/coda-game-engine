@@ -1,7 +1,7 @@
 package kz.zsanzharrko.service.session;
 
 import kz.zsanzharrko.config.GamePropConfigResolver;
-import kz.zsanzharrko.exception.game.GameStartException;
+import kz.zsanzharrko.exception.GameStartException;
 import kz.zsanzharrko.gamecard.GameCard;
 import kz.zsanzharrko.model.Player;
 import kz.zsanzharrko.model.PlayerState;
@@ -78,7 +78,7 @@ class GameServiceImplTest {
     // get GameSession by session
     GameSession gameSession = gameService.getGameBySession(session);
     assertEquals(2, gameSession.getPlayers().size());
-    assertEquals(GameRoundState.NONE, gameSession.getRoundState());
+    assertEquals(GameRoundState.NONE, gameSession.getState());
   }
 
   @Test

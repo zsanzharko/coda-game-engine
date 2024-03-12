@@ -2,24 +2,19 @@ package kz.zsanzharrko.model;
 
 import kz.zsanzharrko.gamecard.GameCard;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class Player {
   private String id;
-  @Setter
   private String name;
-  @Setter
   private Number gameRating;
-  @Setter
   private List<GameCard> cardDeck;
-  @Setter
   private PlayerState state;
 
   public Player(String name, List<GameCard> cardDeck) {

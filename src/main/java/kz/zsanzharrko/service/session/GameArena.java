@@ -1,14 +1,10 @@
 package kz.zsanzharrko.service.session;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import kz.zsanzharrko.config.GameConfig;
 import kz.zsanzharrko.gamecard.GameCard;
 import kz.zsanzharrko.model.Player;
-import kz.zsanzharrko.service.statistic.GameStatisticsState;
 import lombok.Getter;
 
 /**
@@ -20,18 +16,16 @@ import lombok.Getter;
 @Getter
 //@Immutable
 public class GameArena extends Arena {
-  private final List<Player> players;
   private Map<Player, Map<Integer, List<GameCard>>> arena;
   private final GameConfig configuration;
 
-  public GameArena(List<Player> players, GameConfig gameConfig) {
+  public GameArena(Set<Player> players, GameConfig gameConfig) {
     super();
     this.configuration = gameConfig;
-    this.players = players;
-    initArena();
+    initArena(players);
   }
 
-  public void initArena() {
+  public void initArena(Set<Player> players) {
     this.arena = new HashMap<>(players.size());
     for (Player player : players) {
       Map<Integer, List<GameCard>> playerArena = new HashMap<>();
@@ -56,27 +50,6 @@ public class GameArena extends Arena {
     if (invalidRow(row)) return false;
     Map<Integer, List<GameCard>> playerArena = arena.get(player);
     return playerArena.get(row).remove(card);
-  }
-
-  @Override
-  public Map<Player, Map<GameStatisticsState, String>> getStatistics() {
-    Map<Player, Map<GameStatisticsState, String>> statistics = new HashMap<>(players.size());
-    players.forEach(player -> {
-      Map<GameStatisticsState, String> playerStatistics = new HashMap<>();
-      Map<Integer, List<GameCard>> playerArena = arena.get(player);
-      int maxPower = 0;
-      for (List<GameCard> cards : playerArena.values()) {
-        Optional<Integer> cardPowerSum = cards.stream()
-            .map(GameCard::getPower)
-            .max(Integer::sum);
-        if (cardPowerSum.isPresent()) {
-          maxPower += cardPowerSum.get();
-        }
-      }
-      playerStatistics.put(GameStatisticsState.PLAYER_POWER, Integer.toString(maxPower));
-      statistics.put(player, playerStatistics);
-    });
-    return statistics;
   }
 
   @Override

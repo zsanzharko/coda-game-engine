@@ -1,22 +1,18 @@
 package kz.zsanzharrko.service.session.preparation;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
 import kz.zsanzharrko.config.GameConfig;
 import kz.zsanzharrko.gamecard.GameCard;
 import kz.zsanzharrko.model.Player;
 
-public class SessionGameBalancerService {
-  private static SessionGameBalancerService balancerService;
+public class SessionGameBalancer {
+  private static SessionGameBalancer balancer;
   private final int maxCardOnSession;
   private final Random random;
 
-  private SessionGameBalancerService(GameConfig gameConfig) {
+  private SessionGameBalancer(GameConfig gameConfig) {
     this.maxCardOnSession = gameConfig.getGameCardsInitSize();
     this.random = new Random();
   }
@@ -27,8 +23,9 @@ public class SessionGameBalancerService {
    *
    * @param players for get cards from card deck
    * @return playable cards on current session game
+   * todo check algorithm
    */
-  public Map<Player, List<GameCard>> preparationBalanceCards(List<Player> players) {
+  public Map<Player, List<GameCard>> preparationBalanceCards(Set<Player> players) {
     if (!correctCardSizeForGame(maxCardOnSession, players)) return null;
     boolean cardsIsBalanced = false;
     Map<Player, List<GameCard>> preparationCardsPlayers = null;
@@ -65,7 +62,7 @@ public class SessionGameBalancerService {
     return preparationCardsPlayers;
   }
 
-  Map<Player, List<GameCard>> prepareCards(List<Player> players) {
+  Map<Player, List<GameCard>> prepareCards(Set<Player> players) {
     Map<Player, List<GameCard>> preparationCardsPlayers = new HashMap<>(players.size());
     for (Player player : players) {
       preparationCardsPlayers.put(player, new LinkedList<>());
@@ -78,7 +75,7 @@ public class SessionGameBalancerService {
     return preparationCardsPlayers;
   }
 
-  private boolean correctCardSizeForGame(int maxCardOnSession, List<Player> players) {
+  private boolean correctCardSizeForGame(int maxCardOnSession, Set<Player> players) {
     for (Player player : players) {
       if (!(player.getCardDeck().size() >= maxCardOnSession)) {
         return false;
@@ -88,14 +85,10 @@ public class SessionGameBalancerService {
   }
 
 
-  public static SessionGameBalancerService getInstance(GameConfig gameConfig) {
-    if (balancerService == null) {
-      balancerService = new SessionGameBalancerService(gameConfig);
+  public static SessionGameBalancer getInstance(GameConfig gameConfig) {
+    if (balancer == null) {
+      balancer = new SessionGameBalancer(gameConfig);
     }
-    return balancerService;
-  }
-
-  public static SessionGameBalancerService getInstance() {
-    return balancerService;
+    return balancer;
   }
 }

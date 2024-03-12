@@ -1,4 +1,4 @@
-package kz.zsanzharrko.exception.game;
+package kz.zsanzharrko.exception;
 
 public final class GameStartException extends GameException {
   public GameStartException(String message, Throwable throwable) {
